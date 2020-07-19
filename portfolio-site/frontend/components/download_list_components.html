@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="downloadList(releaseInfo)" class="download-list">
+    <!--/*@thymesVar id="releaseInfo" type="net.saamankhali.portfoliosite.models.ReleaseListWithMetadata"*/-->
+    <div th:each="thisRelease,releaseIterStat : ${releaseInfo.releaseList.releases}" class="download-item" th:inline="text">
+        <h3 th:if="${releaseIterStat.first}">
+            Downloads for the latest version ([[${thisRelease.version}]]):
+        </h3>
+        <h3 th:unless="${releaseIterStat.first}">
+            Version [[${thisRelease.version}]]:
+        </h3>
+        <a th:href="@{|../changelog#${thisRelease.version}|}">Changes in this version</a>
+        <div th:each="thisFile : ${thisRelease.files}" th:with="fileMetadata=${releaseInfo.releaseMetadata[thisFile.filePath]}">
+            <p><a th:href="@{./{filePath}(filePath=${thisFile.filePath})}">
+                [[${thisFile.displayName}]] ([[${{fileMetadata.fileSize}}]]) - [[${#dates.format(thisFile.releaseDate, "dd MMMM yyyy")}]]
+            </a></p>
+            <p>
+                SHA1: [[${fileMetadata.sha1}]]
+            </p>
+            <p>
+                SHA256: [[${fileMetadata.sha2_256}]]
+            </p>
+        </div>
+    </div>
+</div>
+</html>

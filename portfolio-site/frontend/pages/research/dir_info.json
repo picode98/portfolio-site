@@ -1,0 +1,10 @@
+{
+  "displayName": "Research",
+  "descMarkup": "Research projects whose teams I am working on or have worked on",
+  "fileVisibility": {
+    "isAllowList": false,
+    "itemNames": [
+      "index.html"
+    ]
+  }
+}

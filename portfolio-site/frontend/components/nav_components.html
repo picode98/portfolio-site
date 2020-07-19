@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="navHead(smartMenusThemeName)" th:with="imageVerticalPadding = 5, baseMenuHeight = 57">
+    <!-- SmartMenus jQuery plugin -->
+    <script th:src="@{/smartmenus/jquery.smartmenus.js}" type="text/javascript"></script>
+
+    <link th:href="@{/css/nav.css}" type="text/css" rel="stylesheet">
+
+    <style type="text/css" th:inline="css">
+        @media (min-width: 768px) {
+            div.nav-container
+            {
+                margin-top: [ [${baseMenuHeight + 8}] ] px !important;
+            }
+        }
+    </style>
+
+    <style id="dynamic-content-container-margin" th:inline="css">
+        @media (min-width: 768px) {
+            div.nav-container
+            {
+                margin-top: [[${baseMenuHeight + 8}]]px !important;
+            }
+
+            :target:before {
+                content: "";
+                display: block;
+                height: [[${baseMenuHeight}]]px; /* fixed header height*/
+                margin: -[[${baseMenuHeight}]]px 0 0; /* negative fixed header height */
+            }
+        }
+        .navbar-image
+        {
+            max-height: [[${baseMenuHeight}]]px;
+        }
+    </style>
+
+    <!-- SmartMenus core CSS (required) -->
+    <link th:href='@{/smartmenus/css/sm-core-css.css}' rel='stylesheet' type='text/css' />
+
+    <link th:href="@{/smartmenus/css/{themeName}/{themeName}.css(themeName=${smartMenusThemeName})}" rel="stylesheet" type="text/css">
+
+    <!-- imagesLoaded jQuery plugin -->
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+
+    <script th:src="@{/js/nav.js}" type="text/javascript"></script>
+    <script type="text/javascript" th:inline="javascript">
+        $(function() {
+            setupNavMenu([[${imageVerticalPadding}]]);
+        });
+    </script>
+</th:block>
+<div th:fragment="nav(navStructure)" class="nav-menu-container" style="z-index: 999;">
+    <!--/*@thymesVar id="navStructure" type="net.saamankhali.portfoliosite.views.NavStructure"*/-->
+    <!--/*@thymesVar id="_viewProperties" type="net.saamankhali.portfoliosite.views.ViewProperties"*/-->
+    <ul th:class="${'sm ' + _viewProperties.smartmenusThemeName}">
+        <th:block th:replace="this :: navItemList(${navStructure.items})" />
+    </ul>
+</div>
+<th:block th:fragment="navItemList(listItems)">
+    <!--/*@thymesVar id="listItems" type="kotlin.collections.AbstractList"*/-->
+    <li th:each="thisItem : ${listItems}">
+        <!--/*@thymesVar id="thisItem" type="net.saamankhali.portfoliosite.views.NavItem"*/-->
+        <a class="navitem" th:href="@{|${thisItem.url}|}" th:inline="text">[[${thisItem.dispName}]]
+            <th:block th:if="${thisItem.releaseList != null}" th:switch="${thisItem.releaseList.newUpdatedStatus}"
+                th:with="NewUpdatedStatus = ${T(net.saamankhali.portfoliosite.models.NewUpdatedStatus)}">
+                <span th:case="${NewUpdatedStatus.NEW}" class="navbar-label navbar-new-label">NEW</span>
+                <span th:case="${NewUpdatedStatus.UPDATED}" class="navbar-label navbar-updated-label">UPDATED</span>
+            </th:block>
+        </a>
+        <ul th:unless="${thisItem.items.empty}">
+            <th:block th:replace="this :: navItemList(${thisItem.items})" />
+        </ul>
+    </li>
+</th:block>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{templates/layout.html}">
+<th:block layout:fragment="page-head">
+    <meta name="SERVER_VIEW_SETTINGS" data-replace-changelog-elements="true">
+    <link th:href="@{/css/changelog.css}" type="text/css" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/notify.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/changelog.js}"></script>
+    <div layout:fragment="changelog-page-head"></div>
+</th:block>
+<th:block layout:fragment="page-body">
+    <div layout:fragment="changelog-page-body"></div>
+</th:block>
+</html>

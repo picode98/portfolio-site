@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{templates/layout.html}">
+<th:block layout:fragment="page-head">
+    <div layout:fragment="dir-page-head"></div>
+</th:block>
+<th:block layout:fragment="page-body">
+    <span>Directory desc.:</span>
+    <div layout:fragment="dir-page-desc"></div>
+    <ul class="link-list">
+        <!--/*@thymesVar id="subfolderInfoList" type="kotlin.collections.AbstractList"*/-->
+        <li th:each="thisDir : ${subfolderInfoList}" class="link-list-item">
+            <a th:href="@{./{dirName}/(dirName=${thisDir.itemName})}" th:text="${thisDir.displayName}"></a>
+            <th:block th:if="${thisDir.descMarkup != null}"> -
+                <span th:utext="${thisDir.descMarkup}"></span>
+            </th:block>
+        </li>
+    </ul>
+</th:block>
+</html>

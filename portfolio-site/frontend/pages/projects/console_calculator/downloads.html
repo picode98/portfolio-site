@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{templates/layout.html}">
+<th:block layout:fragment="page-head">
+    <title>Console Calculator Downloads</title>
+</th:block>
+<th:block layout:fragment="page-body">
+    <th:block th:replace="components/download_list_components :: downloadList(${releaseInfo})" />
+</th:block>
+</html>

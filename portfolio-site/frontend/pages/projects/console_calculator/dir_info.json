@@ -1,0 +1,8 @@
+{
+  "displayName": "Console Calculator",
+  "descMarkup": "An advanced, console-based calculator",
+  "folderVisibility": {
+    "isAllowList": true,
+    "itemNames": []
+  }
+}

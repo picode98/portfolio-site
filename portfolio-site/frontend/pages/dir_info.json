@@ -1,0 +1,12 @@
+{
+  "displayName": "Home",
+  "descMarkup": "Home folder",
+  "folderVisibility": {
+    "isAllowList": true,
+    "itemNames": [
+      "projects",
+      "research",
+      "about"
+    ]
+  }
+}

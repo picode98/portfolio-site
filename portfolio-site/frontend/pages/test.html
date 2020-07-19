@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout.html}">
+<th:block layout:fragment="page-head">
+    <title>Test Full Page</title>
+    <script th:inline="javascript">
+        let serverVar = [[${testServerAttr}]];
+        console.log(serverVar);
+    </script>
+</th:block>
+<th:block layout:fragment="page-body">
+    <p>The server-side variable is:</p>
+    <!--/*@thymesVar id="testServerAttr" type="java.lang.String"*/-->
+    <p th:text="${testServerAttr}"></p>
+</th:block>
+</html>

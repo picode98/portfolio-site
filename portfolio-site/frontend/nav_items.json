@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "dispName": "saamankhali.net",
+      "url": "/"
+    },
+    {
+      "dispName": "About",
+      "url": "/about/",
+      "items": [
+        {
+          "dispName": "About me",
+          "url": "/about/about_me"
+        },
+        {
+          "dispName": "About this site",
+          "url": "/about/about_website"
+        },
+        {
+          "dispName": "Contact me",
+          "url": "/about/contact_me"
+        }
+      ]
+    },
+    {
+      "dispName": "Projects",
+      "url": "/projects/",
+      "items": [
+        {
+          "dispName": "Console Calculator",
+          "url": "/projects/console_calculator/",
+          "releaseDir": "pages/projects/console_calculator/downloads"
+        }
+      ]
+    },
+    {
+      "dispName": "Research",
+      "url": "/research/penn_snake_behrend"
+    }
+  ]
+}
