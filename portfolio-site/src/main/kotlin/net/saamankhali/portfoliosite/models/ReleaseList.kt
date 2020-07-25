@@ -119,7 +119,7 @@ data class ReleaseList(/*@Serializable(with = StringMapDeserializer::class)*/ va
                 val timeSinceRelease = Duration.between(listStats.latestReleaseDate.toInstant(), Instant.now())
                 return when {
                     (listStats.singleRelease && timeSinceRelease <= NEW_RELEASE_INTERVAL) -> NewUpdatedStatus.NEW
-                    (timeSinceRelease <= UPDATED_RELEASE_INTERVAL) -> NewUpdatedStatus.UPDATED
+                    (!listStats.singleRelease && timeSinceRelease <= UPDATED_RELEASE_INTERVAL) -> NewUpdatedStatus.UPDATED
                     else -> NewUpdatedStatus.NONE
                 }
             }

@@ -9,8 +9,14 @@
     <div layout:fragment="dir-page-desc"></div>
     <ul class="link-list">
         <!--/*@thymesVar id="subfolderInfoList" type="kotlin.collections.AbstractList"*/-->
-        <li th:each="thisDir : ${subfolderInfoList}" class="link-list-item">
+        <li th:each="thisDir : ${folderItemList.subfolders}" class="link-list-item">
             <a th:href="@{./{dirName}/(dirName=${thisDir.itemName})}" th:text="${thisDir.displayName}"></a>
+            <th:block th:if="${thisDir.descMarkup != null}"> -
+                <span th:utext="${thisDir.descMarkup}"></span>
+            </th:block>
+        </li>
+        <li th:each="thisDir : ${folderItemList.files}" class="link-list-item">
+            <a th:href="@{./{fileName}(fileName=${thisDir.itemName})}" th:text="${thisDir.displayName}"></a>
             <th:block th:if="${thisDir.descMarkup != null}"> -
                 <span th:utext="${thisDir.descMarkup}"></span>
             </th:block>

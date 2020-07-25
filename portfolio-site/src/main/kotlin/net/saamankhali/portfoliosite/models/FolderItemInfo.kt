@@ -25,7 +25,9 @@ data class FolderItemInfo(val itemName: String, val displayName: String, val des
 
 fun isPageFile(path: Path) = path.toFile().extension == "html"
 
-fun getDirInfoList(path: Path, config: DirConfig): List<FolderItemInfo>
+data class FolderItems(val subfolders: List<FolderItemInfo>, val files: List<FolderItemInfo>)
+
+fun getFolderItems(path: Path, config: DirConfig, thisPageName: String? = null): FolderItems
 {
     var folderNameList: List<Path>? = null
     var fileNameList: List<Path>? = null
@@ -41,7 +43,9 @@ fun getDirInfoList(path: Path, config: DirConfig): List<FolderItemInfo>
 
         if(!config.fileVisibility.isAllowList)
         {
-            fileNameList = itemList.filter { isPageFile(it) && Files.isRegularFile(it) && !config.fileVisibility.itemNames.contains(it.fileName.toString()) }
+            fileNameList = itemList.filter { (thisPageName == null || it.fileName.toString() != thisPageName)
+                    && isPageFile(it) && Files.isRegularFile(it)
+                    && !config.fileVisibility.itemNames.contains(it.fileName.toString()) }
         }
     }
 
@@ -52,15 +56,17 @@ fun getDirInfoList(path: Path, config: DirConfig): List<FolderItemInfo>
 
     if(config.fileVisibility.isAllowList)
     {
-        fileNameList = config.fileVisibility.itemNames.map { path.resolve(it) }.filter { isPageFile(it) && Files.isRegularFile(it) }
+        fileNameList = config.fileVisibility.itemNames.map { path.resolve(it) }
+                .filter { (thisPageName == null || it.fileName.toString() != thisPageName)
+                        && isPageFile(it) && Files.isRegularFile(it) }
     }
 
-    return folderNameList!!.map {
+    return FolderItems(subfolders = folderNameList!!.map {
         val cfg = DirConfig.fromFile(it.resolve("dir_info.json").toFile())
         FolderItemInfo(it.fileName.toString(), cfg.displayName, cfg.descMarkup)
-    } + fileNameList!!.map {
+    }, files = fileNameList!!.map {
         FolderItemInfo.fromFile(it.toFile())
-    }
+    })
 }
 
 //            .map { DirConfig.fromFile(it.resolve("dir_info.json").toFile()) }
