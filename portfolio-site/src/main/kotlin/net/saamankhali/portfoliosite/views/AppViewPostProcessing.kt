@@ -1,22 +1,35 @@
 package net.saamankhali.portfoliosite.views
 
+import net.saamankhali.portfoliosite.PortfolioSiteProperties
 import net.saamankhali.portfoliosite.models.SITE_NAME
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import org.jsoup.nodes.TextNode
 import org.jsoup.select.Elements
+import java.net.URI
 
 fun genPageTitle(origTitle: String): String = "$origTitle | $SITE_NAME"
 
-fun processResponse(responseBody: String): String
+fun processResponse(siteProperties: PortfolioSiteProperties, viewSettings: ViewProperties, responseBody: String): String
 {
     val responseDoc : Document = Jsoup.parse(responseBody)
-    processResponse(responseDoc)
+    processResponse(siteProperties, viewSettings, responseDoc)
     return responseDoc.toString()
 }
 
-fun processResponse(responseBody: Document)
+fun processResponse(siteProperties: PortfolioSiteProperties, viewSettings: ViewProperties, responseBody: Document)
 {
+    responseBody.getElementsByTag("server-page-component").forEach {
+        it.after(
+                when(it.attr("name"))
+                {
+                    "page-title" -> TextNode(responseBody.title())
+                    else -> TextNode("")
+                }
+        ).remove()
+    }
+
     val CHANGELOG_TAGS = mapOf("added" to "added", "fixed" to "fixed", "removed" to "removed")
 
     responseBody.title(genPageTitle(responseBody.title()))
@@ -60,5 +73,17 @@ fun processResponse(responseBody: Document)
         }
 
         shortDescElement.remove()
+    }
+
+    if(viewSettings.showExternalLinkArrow)
+    {
+        responseBody.body().getElementsByTag("a").filter {thisElement ->
+            if(thisElement.hasAttr("href"))
+            {
+                val host: String? = URI(thisElement.attr("href")).host
+                (host != null && !siteProperties.siteHosts.contains(host))
+            }
+            else true
+        }.forEach { it.addClass("external-link") };
     }
 }

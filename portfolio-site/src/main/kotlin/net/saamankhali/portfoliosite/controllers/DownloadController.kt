@@ -1,6 +1,7 @@
 package net.saamankhali.portfoliosite.controllers
 
 import net.saamankhali.portfoliosite.PortfolioSiteProperties
+import net.saamankhali.portfoliosite.models.db.DownloadStatsDBConnector
 import net.saamankhali.portfoliosite.models.getDownloadPath
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -23,7 +24,7 @@ class DownloadFileNotFoundException(filePath: String) : FileNotFoundException("C
 
 @RestController
 class DownloadController
-    @Autowired constructor(val siteProperties: PortfolioSiteProperties)
+    @Autowired constructor(val siteProperties: PortfolioSiteProperties, val statsDBConnector: DownloadStatsDBConnector)
 {
     @GetMapping("/**/$DOWNLOAD_URL_PREFIX/**")
     fun downloadFile(request: HttpServletRequest, response: HttpServletResponse)
@@ -35,6 +36,7 @@ class DownloadController
 
         if(!downloadFile.isFile) throw DownloadFileNotFoundException(downloadPath.toString())
 
+        statsDBConnector.incrementCounts(downloadPath)
         println("Will download: $downloadPath")
 
         response.contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE

@@ -18,6 +18,7 @@ class SiteSecurityConfig : WebSecurityConfigurerAdapter()
                     .httpBasic()
                 .and()
                     .formLogin().disable()
+                    .csrf().disable()
         }
     }
 }

@@ -64,9 +64,10 @@ fun getFolderItems(path: Path, config: DirConfig, thisPageName: String? = null):
     return FolderItems(subfolders = folderNameList!!.map {
         val cfg = DirConfig.fromFile(it.resolve("dir_info.json").toFile())
         FolderItemInfo(it.fileName.toString(), cfg.displayName, cfg.descMarkup)
-    }, files = fileNameList!!.map {
+    }.sortedBy { it.displayName },
+    files = fileNameList!!.map {
         FolderItemInfo.fromFile(it.toFile())
-    })
+    }.sortedBy { it.displayName })
 }
 
 //            .map { DirConfig.fromFile(it.resolve("dir_info.json").toFile()) }

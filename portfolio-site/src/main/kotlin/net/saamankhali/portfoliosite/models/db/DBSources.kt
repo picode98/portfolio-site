@@ -37,8 +37,8 @@ class DownloadDBSetupHelper @Autowired constructor(@Qualifier(value = "downloads
             """
             CREATE TABLE DownloadCounts(
                 path VARCHAR(3072) PRIMARY KEY NOT NULL,
-                downloads_this_week INTEGER DEFAULT 0 NOT NULL,
-                downloads_all_time INTEGER DEFAULT 0 NOT NULL
+                downloads_this_week INTEGER DEFAULT 1 NOT NULL,
+                downloads_all_time INTEGER DEFAULT 1 NOT NULL
             )
             """.trimIndent())
 

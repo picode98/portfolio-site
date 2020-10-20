@@ -6,16 +6,16 @@
 
     <link th:href="@{/css/nav.css}" type="text/css" rel="stylesheet">
 
-    <style type="text/css" th:inline="css">
+    <style type="text/css" th:inline="text">
         @media (min-width: 768px) {
             div.nav-container
             {
-                margin-top: [ [${baseMenuHeight + 8}] ] px !important;
+                margin-top: [[${baseMenuHeight + 8}]]px !important;
             }
         }
     </style>
 
-    <style id="dynamic-content-container-margin" th:inline="css">
+    <style id="dynamic-content-container-margin" th:inline="text">
         @media (min-width: 768px) {
             div.nav-container
             {
@@ -50,13 +50,16 @@
         });
     </script>
 </th:block>
-<div th:fragment="nav(navStructure)" class="nav-menu-container" style="z-index: 999;">
-    <!--/*@thymesVar id="navStructure" type="net.saamankhali.portfoliosite.views.NavStructure"*/-->
-    <!--/*@thymesVar id="_viewProperties" type="net.saamankhali.portfoliosite.views.ViewProperties"*/-->
-    <ul th:class="${'sm ' + _viewProperties.smartmenusThemeName}">
-        <th:block th:replace="this :: navItemList(${navStructure.items})" />
-    </ul>
-</div>
+<th:block th:fragment="nav(navStructure, breadcrumbAncestors)">
+    <th:block th:replace="this :: breadcrumbTrail(${breadcrumbAncestors})" />
+    <div class="nav-menu-container" style="z-index: 999;">
+        <!--/*@thymesVar id="navStructure" type="net.saamankhali.portfoliosite.views.NavStructure"*/-->
+        <!--/*@thymesVar id="_viewProperties" type="net.saamankhali.portfoliosite.views.ViewProperties"*/-->
+        <ul th:class="${'sm ' + _viewProperties.smartmenusThemeName}">
+            <th:block th:replace="this :: navItemList(${navStructure.items})" />
+        </ul>
+    </div>
+</th:block>
 <th:block th:fragment="navItemList(listItems)">
     <!--/*@thymesVar id="listItems" type="kotlin.collections.AbstractList"*/-->
     <li th:each="thisItem : ${listItems}">
@@ -73,4 +76,11 @@
         </ul>
     </li>
 </th:block>
+<div class="breadcrumbs-container" th:fragment="breadcrumbTrail(ancestorItems)">
+    <th:block th:each="thisItem: ${ancestorItems}">
+        <!--/*@thymesVar id="thisItem" type="net.saamankhali.portfoliosite.models.Breadcrumb"*/-->
+        <a th:href="@{|${thisItem.linkPath}|}" th:text="${thisItem.displayName}"></a> &raquo;
+    </th:block>
+    <a href=""><server-page-component name="page-title" /></a>
+</div>
 </html>

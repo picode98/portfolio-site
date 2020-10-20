@@ -7,4 +7,7 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "portfolio-site.views")
 class ViewProperties {
     var smartmenusThemeName: String = "sm-simple"
+    var reCAPTCHASiteKey: String? = null
+
+    var showExternalLinkArrow: Boolean = true
 }

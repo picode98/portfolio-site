@@ -26,15 +26,13 @@ import java.util.*
 import kotlin.math.abs
 
 @Service
-class DownloadMetadataDBConnector @Autowired constructor(val setupHelper: DownloadDBSetupHelper, val siteProperties: PortfolioSiteProperties)
+class DownloadMetadataDBConnector @Autowired constructor(val setupHelper: DownloadDBSetupHelper,
+                                                         val siteProperties: PortfolioSiteProperties,
+                                                         val dbUtils: DBUtils)
 {
     private val dbTemplate: JdbcTemplate = setupHelper.dbTemplate
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
     private val dateFormat: FastDateFormat = DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT
-    private val frontendRootPath = Path.of(siteProperties.frontendLocation).toAbsolutePath()
-
-    private fun toDBPathString(path: Path): String = frontendRootPath.relativize(path.toAbsolutePath()).toString()
-    private fun fromDBPathString(pathString: String) = siteProperties.getFrontendPath(pathString)
 
     private fun computeCachedMetadata(path: Path): CachedDownloadMetadata
     {
@@ -82,7 +80,7 @@ class DownloadMetadataDBConnector @Autowired constructor(val setupHelper: Downlo
             """
             INSERT INTO DownloadMetadata(path, datetime_modified, sha_1, sha_2_256)
             VALUES(?, ?, ?, ?)
-            """.trimIndent(), toDBPathString(metadata.path), dateFormat.format(metadata.datetime_modified), metadata.sha1, metadata.sha2_256)
+            """.trimIndent(), dbUtils.toDBPathString(metadata.path), dateFormat.format(metadata.datetime_modified), metadata.sha1, metadata.sha2_256)
     }
 
     private fun updateCachedMetadata(metadata: CachedDownloadMetadata)
@@ -92,7 +90,7 @@ class DownloadMetadataDBConnector @Autowired constructor(val setupHelper: Downlo
               UPDATE DownloadMetadata
               SET datetime_modified = ?, sha_1 = ?, sha_2_256 = ?
               WHERE path = ?
-            """.trimIndent(), dateFormat.format(metadata.datetime_modified), metadata.sha1, metadata.sha2_256, toDBPathString(metadata.path))
+            """.trimIndent(), dateFormat.format(metadata.datetime_modified), metadata.sha1, metadata.sha2_256, dbUtils.toDBPathString(metadata.path))
     }
 
     public fun getCachedMetadata(path: Path): CachedDownloadMetadata
@@ -107,12 +105,12 @@ class DownloadMetadataDBConnector @Autowired constructor(val setupHelper: Downlo
             """.trimIndent(),
             RowMapper {resultSet, _ ->
                 CachedDownloadMetadata(
-                        fromDBPathString(resultSet.getString("path")),
+                        dbUtils.fromDBPathString(resultSet.getString("path")),
                         dateFormat.parse(resultSet.getString("datetime_modified")),
                         resultSet.getString("sha_1"),
                         resultSet.getString("sha_2_256")
                 )
-            }, toDBPathString(path))
+            }, dbUtils.toDBPathString(path))
 
         if(resultList.isNotEmpty())
         {

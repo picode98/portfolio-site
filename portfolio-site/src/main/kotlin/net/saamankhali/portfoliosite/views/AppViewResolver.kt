@@ -1,5 +1,7 @@
 package net.saamankhali.portfoliosite.views
 
+import net.saamankhali.portfoliosite.PortfolioSiteProperties
+import net.saamankhali.portfoliosite.models.BreadcrumbTrailFactory
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.annotation.Order
@@ -16,7 +18,9 @@ class AppViewResolver
     @Autowired constructor(private val thymeleafViewResolver: ThymeleafViewResolver,
                            private val engine: SpringTemplateEngine,
                            private val siteNavLoader: NavLoader,
-                           private val viewProperties: ViewProperties) : ViewResolver
+                           private val siteProperties: PortfolioSiteProperties,
+                           private val viewProperties: ViewProperties,
+                           private val breadcrumbTrailFactory: BreadcrumbTrailFactory) : ViewResolver
 {
     init
     {
@@ -26,6 +30,6 @@ class AppViewResolver
 
     override fun resolveViewName(viewName: String, locale: Locale): View? {
         val thymeleafView: View? = thymeleafViewResolver.resolveViewName(viewName, locale)
-        return thymeleafView?.let { AppView(it, siteNavLoader.getSiteNav(), viewProperties) }
+        return thymeleafView?.let { AppView(it, siteNavLoader.getSiteNav(), siteProperties, viewProperties, breadcrumbTrailFactory) }
     }
 }

@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PortfolioSiteApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="portfolio-site" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="net.saamankhali.portfoliosite.PortfolioSiteApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="spring.profiles.active" value="dev" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
