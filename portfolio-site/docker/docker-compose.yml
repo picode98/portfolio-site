@@ -1,0 +1,7 @@
+services:
+    server:
+        image: portfolio-site
+        build:
+            context: .
+            dockerfile: Dockerfile
+        
