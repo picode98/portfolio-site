@@ -12,8 +12,9 @@ services:
         extra_hosts:
             - "mail-server:172.18.0.1"
         ports:
-            - "${SERVER_PORT:-7001}:8080"
+            - "${SRV_PORT:-7001}:8080"
         volumes:
             - sqlite-dbs:/home/web-app-user/data
             - "./application-prod.properties:/home/web-app-user/app/application-prod.properties"
+        restart: unless-stopped
         
